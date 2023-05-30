@@ -1,5 +1,5 @@
 import { Recipe } from "../types/recipe";
-//import Firebase from "../utils/firebase";
+import Firebase from "../utils/firebase";
 //import { appState, addObserver } from "../../store";
 
 export default class Dashboard extends HTMLElement {
@@ -19,7 +19,14 @@ export default class Dashboard extends HTMLElement {
          title.innerText = "Bienvenido a Recetas compartidas"
          this.shadowRoot?.appendChild
         
-        const recipes = this.ownerDocument.createElement("button");
-        
+         const otherRecipes = await Firebase.getRecipes();
+         otherRecipes.forEach((p: Recipe) => {
+           const container = this.ownerDocument.createElement("section");
+           const recipeName = this.ownerDocument.createElement("h3");
+           recipeName.innerText = p.recipeName;
+           container.appendChild(recipeName);
+
+        this.shadowRoot?.appendChild(container);
+        });
     }
 }
